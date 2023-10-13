@@ -1,0 +1,54 @@
+library(here)
+library(ggplot2)
+library(rlang)
+library(rstatix)  
+library(nlme)
+library(cowplot)
+library(ggbeeswarm)
+library(ggpubr)
+library(ggsignif)
+
+setwd("/home/julianne/Documents/slc_si_paper/")
+data<-read.csv("FITC_data/Spontaneous_FITC_Analysis - Sheet1.csv", header=TRUE)
+names(data)
+generate_boxplots <- function(input_data, X, Y, min,max){
+  data<-as.data.frame(input_data)
+  #Ensure correct ordering of levels 
+  data$Genotype <- factor(data$Genotype, levels = c("WT", "HET", "MUT"))
+  data$Sex <- factor(data$Sex, levels = c("Female","Male"))
+  
+  ggplot(data=data,aes(x={{X}},y={{Y}}, fill={{X}})) + 
+    #geom_violin(alpha=0.25,position=position_dodge(width=.75),size=1,color="black",draw_quantiles=c(0.5))+
+    geom_boxplot(alpha=0.25)+ 
+    #geom_quasirandom(alpha=0.1)+
+    scale_fill_viridis_d()+
+    geom_point(size=1,position=position_jitter(width=0.25),alpha=0.8)+
+    theme_cowplot(16) +
+    #ylim(min,max)+
+    theme(legend.position = "none")
+  
+  
+}
+
+## lines that you need to modify ---
+generate_boxplots(data, Genotype, Mean, 0,40 ) + 
+  stat_compare_means(comparisons = list(c("WT", "MUT")),
+                     method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
+
+generate_boxplots(data, Genotype, Mean, 0,40 ) + 
+  stat_compare_means(comparisons = list(c("WT", "MUT")),method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)+
+  facet_wrap(~FITC)
+
+# Add parametric and non-parametric stats to README.md
+# WT vs MUT
+t.test(Mean~Genotype,data)
+wilcox.test(Mean~Genotype,data)
+
+data<-read.csv("SLC Spontaneous Weights - Sheet1.csv", header=TRUE)
+
+# WT vs HET
+data <- data %>% filter(Genotype!="MUT")
+t.test(Weight..g.~Genotype,data)
+wilcox.test(Weight..g.~Genotype,data)
+
+
