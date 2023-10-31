@@ -10,11 +10,10 @@ library(cowplot)
 library(ggpubr)
 library(dplyr)
 
-setwd("C:/Users/Jacobs Laboratory/Documents/JCYang/SLC Spontaneous/ICPMS/")
 here::i_am("ICP_MS_Analysis.R")
 
 ### Data Preprocessing ---
-df<- read.csv("Analysis_ICP_MS.csv", header=TRUE, row.names=1)
+df<- readr::read_csv(here("Analysis_ICP_MS.csv")
 
 # replace all n/a and declare all element columns as numerical
 df[df=="n/a"]<-0
@@ -26,11 +25,8 @@ df$Genotype_Batch <- paste0(df$Genotype, "_",df$Batch)
 df$Genotype_Sex <- paste0(df$Genotype,"_",df$Sex)
 
 # Subset by SampleType - with outliers
-df_fp_col <- df %>% filter(SampleType=="FP-COL")
 df_fp_si <- df %>% filter(SampleType=="FP-SI")
-df_muc_col <- df %>% filter(SampleType=="MUC-COL")
 df_muc_si <- df %>% filter(SampleType=="MUC-SI")
-df_ts_col <- df %>% filter(SampleType=="TS-COL")
 df_ts_si <- df %>% filter(SampleType=="TS-SI")
 
 
@@ -61,23 +57,14 @@ generate_violin_plots <- function (input_data, column_index, X) {
 
 
 element_plots <- list()
-fp_col_plots <- list()
 fp_si_plots <- list()
-muc_col_plots <- list()
 muc_si_plots <- list()
-ts_col_plots <- list()
 ts_si_plots <- list()
 compare_vector<- c("WT","MUT")
 
 # Loop through all elements - Genotype as X variable
 for (int in 1:7){
     print(int)
-
-    fp_col <- generate_violin_plots(df_fp_col, int, Genotype) +
-      theme(plot.title = element_text(hjust = 0.5)) +
-      ggtitle("FP Col")+
-      stat_compare_means(comparisons = compare_vector,
-                         method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
     fp_si <- generate_violin_plots(df_fp_si, int, Genotype)+
       theme(plot.title = element_text(hjust = 0.5)) +
       ggtitle("FP SI")+
@@ -88,48 +75,32 @@ for (int in 1:7){
       ggtitle("MUC SI")+
       stat_compare_means(comparisons = compare_vector,
                          method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
-    muc_col <- generate_violin_plots(df_muc_col, int, Genotype)+
-      theme(plot.title = element_text(hjust = 0.5)) +
-      ggtitle("MUC Col")+
-      stat_compare_means(comparisons = compare_vector,
-                         method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
+    m
     ts_si <- generate_violin_plots(df_ts_si, int, Genotype)+
       theme(plot.title = element_text(hjust = 0.5)) +
       ggtitle("TS SI")+
       stat_compare_means(comparisons = compare_vector,
                          method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
-    ts_col <- generate_violin_plots(df_ts_col, int, Genotype)+
-      theme(plot.title = element_text(hjust = 0.5)) +
-      ggtitle("TS Col")+
-      stat_compare_means(comparisons = compare_vector,
-                         method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
+    t
 
     element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
                                          rows = 3,cols=2)
-    fp_col_plots[[int]] <- fp_col
     fp_si_plots[[int]] <- fp_si
-    muc_col_plots[[int]] <- muc_col
     muc_si_plots[[int]] <- muc_si
-    ts_col_plots[[int]] <- ts_col
     ts_si_plots[[int]] <- ts_si
 }
 
 # Loop through all elements - Genotype_Batch as X variable
 element_plots <- list()
-fp_col_plots <- list()
 fp_si_plots <- list()
-muc_col_plots <- list()
 muc_si_plots <- list()
-ts_col_plots <- list()
 ts_si_plots <- list()
 compare_vector<- c("WT","MUT")
 
 for (int in 1:7){
   print(int)
   
-  fp_col <- generate_violin_plots(df_fp_col, int, Genotype_Batch) +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("FP Col")+
+  
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   fp_si <- generate_violin_plots(df_fp_si, int, Genotype_Batch)+
     theme(plot.title = element_text(hjust = 0.5)) +
@@ -139,45 +110,30 @@ for (int in 1:7){
     theme(plot.title = element_text(hjust = 0.5)) +
     ggtitle("MUC SI")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  muc_col <- generate_violin_plots(df_muc_col, int, Genotype_Batch)+
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("MUC Col")+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   ts_si <- generate_violin_plots(df_ts_si, int, Genotype_Batch)+
     theme(plot.title = element_text(hjust = 0.5)) +
     ggtitle("TS SI")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  ts_col <- generate_violin_plots(df_ts_col, int, Genotype_Batch)+
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("TS Col")+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   
   element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
                                              rows = 3,cols=2)
-  fp_col_plots[[int]] <- fp_col
   fp_si_plots[[int]] <- fp_si
-  muc_col_plots[[int]] <- muc_col
   muc_si_plots[[int]] <- muc_si
-  ts_col_plots[[int]] <- ts_col
   ts_si_plots[[int]] <- ts_si
 }
 
 # Loop through all elements - Genotype_Sex as X variable
 element_plots <- list()
-fp_col_plots <- list()
 fp_si_plots <- list()
-muc_col_plots <- list()
 muc_si_plots <- list()
-ts_col_plots <- list()
 ts_si_plots <- list()
 
 for (int in 1:7){
   print(int)
   
-  fp_col <- generate_violin_plots(df_fp_col, int, Genotype_Sex) +
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("FP Col")+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   fp_si <- generate_violin_plots(df_fp_si, int, Genotype_Sex)+
     theme(plot.title = element_text(hjust = 0.5)) +
     ggtitle("FP SI")+
@@ -186,37 +142,21 @@ for (int in 1:7){
     theme(plot.title = element_text(hjust = 0.5)) +
     ggtitle("MUC SI")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  muc_col <- generate_violin_plots(df_muc_col, int, Genotype_Sex)+
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("MUC Col")+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   ts_si <- generate_violin_plots(df_ts_si, int, Genotype_Sex)+
     theme(plot.title = element_text(hjust = 0.5)) +
     ggtitle("TS SI")+
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
-  ts_col <- generate_violin_plots(df_ts_col, int, Genotype_Sex)+
-    theme(plot.title = element_text(hjust = 0.5)) +
-    ggtitle("TS Col")+
-    theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
+  
   
   element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
                                              rows = 3,cols=2)
-  fp_col_plots[[int]] <- fp_col
   fp_si_plots[[int]] <- fp_si
-  muc_col_plots[[int]] <- muc_col
   muc_si_plots[[int]] <- muc_si
-  ts_col_plots[[int]] <- ts_col
   ts_si_plots[[int]] <- ts_si
 }
 
 
-
-#FP COL
-dev.new(width=15, height=10)
-plot_grid(fp_col_plots[[1]],fp_col_plots[[2]],
-          fp_col_plots[[3]],fp_col_plots[[4]],
-          fp_col_plots[[5]],fp_col_plots[[6]],
-          fp_col_plots[[7]],nrow = 2, ncol=4)
 
 #FP SI
 dev.new(width=15, height=10)
@@ -225,12 +165,6 @@ plot_grid(fp_si_plots[[1]],fp_si_plots[[2]],
           fp_si_plots[[5]],fp_si_plots[[6]],
           fp_si_plots[[7]],nrow = 2, ncol=4)
 
-#MUC COL
-dev.new(width=15, height=10)
-plot_grid(muc_col_plots[[1]],muc_col_plots[[2]],
-          muc_col_plots[[3]],muc_col_plots[[4]],
-          muc_col_plots[[5]],muc_col_plots[[6]],
-          muc_col_plots[[7]],nrow = 2, ncol=4)
 
 #MUC SI
 dev.new(width=15, height=10)
@@ -239,12 +173,6 @@ plot_grid(muc_si_plots[[1]],muc_si_plots[[2]],
           muc_si_plots[[5]],muc_si_plots[[6]],
           muc_si_plots[[7]],nrow = 2, ncol=4)
 
-#TS COL
-dev.new(width=15, height=10)
-plot_grid(ts_col_plots[[1]],ts_col_plots[[2]],
-          ts_col_plots[[3]],ts_col_plots[[4]],
-          ts_col_plots[[5]],ts_col_plots[[6]],
-          ts_col_plots[[7]],nrow = 2, ncol=4)
 
 #TS SI
 dev.new(width=15, height=10)
@@ -262,16 +190,10 @@ for (int in 1:7){
   print(int)
 ts_si_para <- t.test(df_ts_si[,int]~Genotype,df_ts_si)
 ts_si_nonpara <- wilcox.test(df_ts_si[,int]~Genotype,df_ts_si)
-ts_col_para <- t.test(df_ts_col[,int]~Genotype,df_ts_col)
 muc_si_para <- t.test(df_muc_si[,int]~Genotype,df_muc_si)
 muc_si_nonpara <- wilcox.test(df_muc_si[,int]~Genotype,df_muc_si)
-ts_col_nonpara <- wilcox.test(df_ts_col[,int]~Genotype,df_ts_col)
-muc_col_para <- t.test(df_muc_col[,int]~Genotype,df_muc_col)
-muc_col_nonpara <- wilcox.test(df_muc_col[,int]~Genotype,df_muc_col)
 fp_si_para <- t.test(df_fp_si[,int]~Genotype,df_fp_si)
 fp_si_nonpara <- wilcox.test(df_fp_si[,int]~Genotype,df_fp_si)
-fp_col_para <- t.test(df_fp_col[,int]~Genotype,df_fp_col)
-fp_col_nonpara <- wilcox.test(df_fp_col[,int]~Genotype,df_fp_col)
 
 element_stats_para[[int]] <-list(print(fp_col_para), print(fp_si_para),print(muc_col_para),print(muc_si_para), print(ts_col_para),print(ts_si_para))
 element_stats_nonpara[[int]] <-list(print(fp_col_nonpara), print(fp_si_nonpara),print(muc_col_nonpara),print(muc_si_nonpara), print(ts_col_nonpara),print(ts_si_nonpara))
@@ -306,3 +228,4 @@ element_stats_nonpara[[6]]
 # Selenium
 element_stats_para[[7]]
 element_stats_nonpara[[7]]
+
