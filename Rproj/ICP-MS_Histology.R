@@ -5,9 +5,9 @@ library(here)
 library(tidyr)
 library(ggbeeswarm)
 
-
+here::i_am(path = "Rproj/ICP-MS_Histology.R")
 ## Histo Scores --
-histo<- read.csv("/home/julianne/Documents/slcsipaper/Ileum Spontaneous ICP-MS.csv")
+histo <- readr::read_csv(here("SLC ICP-MS/Ileum Spontaneous ICP-MS.csv"))
 histo$Genotype <- factor(histo$Genotype, levels=c("WT", "HET", "MUT"))
 
 ggplot(data=histo,aes(x=Genotype,y=Grade, color=Genotype)) + 
@@ -23,3 +23,4 @@ ggplot(data=histo,aes(x=Genotype,y=Grade, color=Genotype)) +
   theme(plot.title = element_text(hjust = 0.5))
 
 wilcox.test(Grade~Genotype,data=histo)
+
