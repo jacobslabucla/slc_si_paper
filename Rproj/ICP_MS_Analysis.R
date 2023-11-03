@@ -10,20 +10,22 @@ library(cowplot)
 library(ggpubr)
 library(dplyr)
 
-here::i_am("ICP_MS_Analysis.R")
+here::i_am(path = "slc_si_paper/Rproj/ICP_MS_Analysis.R")
 
 ### Data Preprocessing ---
-df<- readr::read_csv(here("Analysis_ICP_MS.csv")
-
+df<- readr::read_csv(here("slc_si_paper/SLC ICP-MS/Analysis_ICP_MS.csv"))
+Samples=df$SampleID
+df=df %>% select(-c("SampleID"))
+row.names(df)= Samples
 # replace all n/a and declare all element columns as numerical
-df[df=="n/a"]<-0
+df[df=="n/a"]<-"0"
 vector <- names(df)
 elements <- vector[1:7]
 df <- df %>% mutate_at(c(elements), as.numeric)
 str(df)
 df$Genotype_Batch <- paste0(df$Genotype, "_",df$Batch)
 df$Genotype_Sex <- paste0(df$Genotype,"_",df$Sex)
-
+str(df)
 # Subset by SampleType - with outliers
 df_fp_si <- df %>% filter(SampleType=="FP-SI")
 df_muc_si <- df %>% filter(SampleType=="MUC-SI")
@@ -75,15 +77,15 @@ for (int in 1:7){
       ggtitle("MUC SI")+
       stat_compare_means(comparisons = compare_vector,
                          method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
-    m
+    
     ts_si <- generate_violin_plots(df_ts_si, int, Genotype)+
       theme(plot.title = element_text(hjust = 0.5)) +
       ggtitle("TS SI")+
       stat_compare_means(comparisons = compare_vector,
                          method="wilcox", vjust=0.5,label="p.signif",step.increase=0.08, hide.ns = TRUE)
-    t
+    
 
-    element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
+    element_plots[[int]] <- cowplot::plot_grid(fp_si,muc_si,ts_si, 
                                          rows = 3,cols=2)
     fp_si_plots[[int]] <- fp_si
     muc_si_plots[[int]] <- muc_si
@@ -117,7 +119,7 @@ for (int in 1:7){
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
   
-  element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
+  element_plots[[int]] <- cowplot::plot_grid(fp_si,muc_si, ts_si, 
                                              rows = 3,cols=2)
   fp_si_plots[[int]] <- fp_si
   muc_si_plots[[int]] <- muc_si
@@ -149,7 +151,7 @@ for (int in 1:7){
     theme(axis.text.x = element_text(angle = 90, vjust = 0.5, hjust=1))
   
   
-  element_plots[[int]] <- cowplot::plot_grid(fp_col, fp_si,muc_col,muc_si, ts_col,ts_si, 
+  element_plots[[int]] <- cowplot::plot_grid(fp_si,muc_si,ts_si, 
                                              rows = 3,cols=2)
   fp_si_plots[[int]] <- fp_si
   muc_si_plots[[int]] <- muc_si
@@ -195,8 +197,8 @@ muc_si_nonpara <- wilcox.test(df_muc_si[,int]~Genotype,df_muc_si)
 fp_si_para <- t.test(df_fp_si[,int]~Genotype,df_fp_si)
 fp_si_nonpara <- wilcox.test(df_fp_si[,int]~Genotype,df_fp_si)
 
-element_stats_para[[int]] <-list(print(fp_col_para), print(fp_si_para),print(muc_col_para),print(muc_si_para), print(ts_col_para),print(ts_si_para))
-element_stats_nonpara[[int]] <-list(print(fp_col_nonpara), print(fp_si_nonpara),print(muc_col_nonpara),print(muc_si_nonpara), print(ts_col_nonpara),print(ts_si_nonpara))
+element_stats_para[[int]] <-list(print(fp_si_para),print(muc_si_para), print(ts_si_para))
+element_stats_nonpara[[int]] <-list(print(fp_si_nonpara),print(muc_si_nonpara), print(ts_si_nonpara))
 
 }
 
