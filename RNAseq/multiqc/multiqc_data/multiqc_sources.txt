@@ -1,0 +1,5 @@
+Module	Section	Sample Name	Source
+FastQC	all_sections	JJ1715_393_S43_R1_001	/u/project/jpjacobs/jpjacobs/rna_seq/S-23-1715_set1/test_RNAseq/1_QC_output/multiqc/JJ1715_393_S43_R1_001_fastqc.zip
+FastQC	all_sections	JJ1715_393_S43_R2_001	/u/project/jpjacobs/jpjacobs/rna_seq/S-23-1715_set1/test_RNAseq/1_QC_output/multiqc/JJ1715_393_S43_R2_001_fastqc.zip
+FastQC	all_sections	JJ1715_394_S44_R1_001	/u/project/jpjacobs/jpjacobs/rna_seq/S-23-1715_set1/test_RNAseq/1_QC_output/multiqc/JJ1715_394_S44_R1_001_fastqc.zip
+FastQC	all_sections	JJ1715_394_S44_R2_001	/u/project/jpjacobs/jpjacobs/rna_seq/S-23-1715_set1/test_RNAseq/1_QC_output/multiqc/JJ1715_394_S44_R2_001_fastqc.zip
