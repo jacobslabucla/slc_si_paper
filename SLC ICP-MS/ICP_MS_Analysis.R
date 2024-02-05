@@ -17,7 +17,7 @@ here::i_am("ICP_MS_Analysis.R")
 df<- read.csv("Analysis_ICP_MS.csv", header=TRUE, row.names=1)
 
 # replace all n/a and declare all element columns as numerical
-df[df=="n/a"]<-0
+df[df=="n/a"]<-"0"
 vector <- names(df)
 elements <- vector[1:7]
 df <- df %>% mutate_at(c(elements), as.numeric)

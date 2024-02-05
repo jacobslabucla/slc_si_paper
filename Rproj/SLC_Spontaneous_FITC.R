@@ -9,7 +9,7 @@ library(ggpubr)
 library(ggsignif)
 
 setwd("/home/julianne/Documents/slc_si_paper/")
-data<-read.csv("FITC_data/Spontaneous_FITC_Analysis - Sheet1.csv", header=TRUE)
+data<-read.csv("SLC Spontaneous FITC/11.29.23_GPX_Assay.xlsx - GPX.csv", header=TRUE)
 names(data)
 generate_boxplots <- function(input_data, X, Y, min,max){
   data<-as.data.frame(input_data)
@@ -31,7 +31,7 @@ generate_boxplots <- function(input_data, X, Y, min,max){
 }
 
 ## lines that you need to modify ---
-generate_boxplots(data, Genotype, Mean, 0,40 ) + 
+generate_boxplots(data, SLC, Final_GPX_Activity, 0,40 ) + 
   stat_compare_means(comparisons = list(c("WT", "MUT")),
                      method="wilcox", vjust=0.5,label="",step.increase=0.08, hide.ns = TRUE)+
   ggtitle("SLC Spontaneous FITC")
