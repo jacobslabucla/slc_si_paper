@@ -1,0 +1,12 @@
+{
+    "salmon_version": "1.10.0",
+    "index": "/u/home/j/jpjacobs/project-jpjacobs/software_rna_seq/salmon/salmon-latest_linux_x86_64/Mus_musculus_c57bl6nj_index",
+    "libType": "A",
+    "mates1": "trim_JJ1715_M194_S38_R1_001.fastq_paired.fq.gz",
+    "mates2": "trim_JJ1715_M194_S38_R2_001.fastq_paired.fq.gz",
+    "threads": "8",
+    "gcBias": [],
+    "validateMappings": [],
+    "output": "trim_JJ1715_M194_S38_R1_001.fastq_paired.fq_quant",
+    "auxDir": "aux_info"
+}

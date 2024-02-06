@@ -1,0 +1,22 @@
+{
+    "read_files": "[ trim_JJ1715_BE4_S54_R1_001.fastq_paired.fq.gz, trim_JJ1715_BE4_S54_R2_001.fastq_paired.fq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 26598028,
+    "num_assigned_fragments": 26598028,
+    "num_frags_with_concordant_consistent_mappings": 25746520,
+    "num_frags_with_inconsistent_or_orphan_mappings": 913456,
+    "strand_mapping_bias": 0.00002846905648536564,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 733,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 25746520,
+    "SF": 396342,
+    "SR": 516381,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}

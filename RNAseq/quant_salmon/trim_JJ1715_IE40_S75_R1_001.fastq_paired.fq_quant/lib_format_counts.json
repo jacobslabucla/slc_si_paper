@@ -1,0 +1,22 @@
+{
+    "read_files": "[ trim_JJ1715_IE40_S75_R1_001.fastq_paired.fq.gz, trim_JJ1715_IE40_S75_R2_001.fastq_paired.fq.gz]",
+    "expected_format": "ISR",
+    "compatible_fragment_ratio": 1.0,
+    "num_compatible_fragments": 19834659,
+    "num_assigned_fragments": 19834659,
+    "num_frags_with_concordant_consistent_mappings": 18909755,
+    "num_frags_with_inconsistent_or_orphan_mappings": 976803,
+    "strand_mapping_bias": 0.000014595428214792456,
+    "MSF": 0,
+    "OSF": 0,
+    "ISF": 276,
+    "MSR": 0,
+    "OSR": 0,
+    "ISR": 18909755,
+    "SF": 621263,
+    "SR": 355264,
+    "MU": 0,
+    "OU": 0,
+    "IU": 0,
+    "U": 0
+}
