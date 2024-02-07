@@ -26,7 +26,7 @@ names(files) <-  samples
 
 ## List all directories containing data  
 ## Since all quant files have the same name it is useful to have names for each element
-ids <- read.delim("RNAseq/quant_salmon/output_JJ1715_393_S43_R1_001.fastq_paired.fq_quant/quant.sf", sep="\t",header=T)
+ids <- read.delim("trim_JJ1715_101_S25_R1_001.fastq_paired.fq_quant/quant.sf", sep="\t",header=T)
 ids <- as.character(ids[,1])
 head(ids)
 require(stringr)
@@ -51,3 +51,5 @@ save(txi, file = "../matrix_tximport_salmon.Rdata") # objeto R
 write.csv(txi$abundance, file = "../matrix_salmon_tximport_abundance.csv") # TPM
 write.csv(txi$counts, file = "../matrix_salmon_tximport_counts.csv") # counts
 
+df <- txi$abundance
+summary(colSums(df))

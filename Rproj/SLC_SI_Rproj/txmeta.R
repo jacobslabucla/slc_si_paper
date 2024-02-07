@@ -16,7 +16,7 @@ coldata <- data.frame(files=file, names="JJ1715_393_S43", sample="1",
 
 # now point to the Salmon index itself to create a linkedTxome
 # as the index will not match a known txome
-indexDir <- file.path(dir, "Dm.BDGP6.22.98.plus_salmon-0.14.1")
+indexDir <- file.path("/home/julianne/Documents/transcriptomicsonhoffman/Mus_musculus_c57bl6nj_index/")
 
 # point to the source FASTA and GTF:
 fastaFTP <- c("ftp://ftp.ensembl.org/pub/release-98/fasta/drosophila_melanogaster/cdna/Drosophila_melanogaster.BDGP6.22.cdna.all.fa.gz",
@@ -25,9 +25,8 @@ fastaFTP <- c("ftp://ftp.ensembl.org/pub/release-98/fasta/drosophila_melanogaste
 gtfPath <- file.path(dir, "Drosophila_melanogaster.BDGP6.22.98.plus.gtf.gz")
 
 # now create a linkedTxome, linking the Salmon index to its FASTA and GTF sources
-makeLinkedTxome(indexDir=indexDir, source="Ensembl", organism="Drosophila melanogaster",
+makeLinkedTxome(indexDir=indexDir, source="Ensembl", organism="Mus musculus",
                 release="98", genome="BDGP6.22", fasta=fastaFTP, gtf=gtfPath, write=FALSE)
-
 
 ## Create a DESeqDataSet object
 dds <- DESeqDataSetFromTximport(txi, sampleTable, ~ condition)
