@@ -4,14 +4,24 @@ library(tximeta)
 library(SummarizedExperiment)
 library(readxl)
 library(GenomicFeatures)
+library(BiocFileCache)
 
+setwd("/home/julianne/Documents/slc_si_paper/")
 
 ## add annotation for the geneIDs
+dirquant <- "RNAseq/quant_salmon/"
+
+coldata <- read.csv("RNAseq/starting_files/Metadata.csv")
+coldata$names <- coldata$SampleID
+coldata$files <- paste0(dirquant,coldata$Filepath,"/","quant.sf")
+all(file.exists(coldata$files))
+coldata <- as.data.frame(coldata)
+rownames(coldata) <- coldata$names
 
 # point to a Salmon quantification file with an additional artificial transcript
-dir <- "output_JJ1715_393_S43_R1_001.fastq_paired.fq_quant/"
+dir <- "RNAseq/quant_salmon/trim_JJ1715_101_S25_R1_001.fastq_paired.fq_quant/"
 file <- file.path(dir, "quant.sf")
-coldata <- data.frame(files=file, names="JJ1715_393_S43", sample="1",
+coldata <- data.frame(files=file, names="JJ1715_101_S25", sample="1",
                       stringsAsFactors=FALSE)
 
 # now point to the Salmon index itself to create a linkedTxome
@@ -19,14 +29,16 @@ coldata <- data.frame(files=file, names="JJ1715_393_S43", sample="1",
 indexDir <- file.path("/home/julianne/Documents/transcriptomicsonhoffman/Mus_musculus_c57bl6nj_index/")
 
 # point to the source FASTA and GTF:
-fastaFTP <- c("ftp://ftp.ensembl.org/pub/release-98/fasta/drosophila_melanogaster/cdna/Drosophila_melanogaster.BDGP6.22.cdna.all.fa.gz",
-              "ftp://ftp.ensembl.org/pub/release-98/fasta/drosophila_melanogaster/ncrna/Drosophila_melanogaster.BDGP6.22.ncrna.fa.gz",
-              "extra_transcript.fa.gz")
-gtfPath <- file.path(dir, "Drosophila_melanogaster.BDGP6.22.98.plus.gtf.gz")
+fastaFTP <- c("ftp://ftp.ensembl.org/pub/release-111/fasta/mus_musculus_c57bl6nj/cdna/Mus_musculus_c57bl6nj.C57BL_6NJ_v1.cdna.all.fa.gz")
+gtfPath <- file.path("/home/julianne/Documents/transcriptomicsonhoffman/Mus_musculus_c57bl6nj.C57BL_6NJ_v1.111.gtf.gz")
 
 # now create a linkedTxome, linking the Salmon index to its FASTA and GTF sources
 makeLinkedTxome(indexDir=indexDir, source="Ensembl", organism="Mus musculus",
-                release="98", genome="BDGP6.22", fasta=fastaFTP, gtf=gtfPath, write=FALSE)
+                release="111", genome="C57BL_6NJ_v1.111", fasta=fastaFTP, gtf=gtfPath, write=FALSE)
 
-## Create a DESeqDataSet object
-dds <- DESeqDataSetFromTximport(txi, sampleTable, ~ condition)
+# add annotations
+se <- tximeta(coldata, useHub = F)
+gse <- summarizeToGene(se)
+save(gse, file="RNAseq/matrix_gse_salmon_tximeta.RData")
+
+se(tximeta())
