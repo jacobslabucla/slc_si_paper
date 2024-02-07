@@ -1,0 +1,9 @@
+Job 1648973 started on:    n6441
+Job 1648973 started on:    Tue Feb 6 19:43:54 PST 2024
+ 
+this script assumes you are in a directory where the html reports from FASTQC are located
+
+  /// MultiQC 🔍 | v1.12
+
+|           multiqc | MultiQC Version v1.19 now available!
+|           multiqc | Search path : /u/project/jpjacobs/jpjacobs/software_rna_seq/test_RNAseq/slc_si_paper/RNAseq/quant_salmon
