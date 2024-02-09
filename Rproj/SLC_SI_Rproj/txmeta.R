@@ -36,9 +36,17 @@ gtfPath <- file.path("/home/julianne/Documents/transcriptomicsonhoffman/Mus_musc
 makeLinkedTxome(indexDir=indexDir, source="Ensembl", organism="Mus musculus",
                 release="111", genome="C57BL_6NJ_v1.111", fasta=fastaFTP, gtf=gtfPath, write=FALSE)
 
-# add annotations
+# summarize transcripts to gene level 
 se <- tximeta(coldata, useHub = F)
 gse <- summarizeToGene(se)
 save(gse, file="RNAseq/matrix_gse_salmon_tximeta.RData")
 
 se(tximeta())
+
+## Run DESeq2 --
+BiocManager::install("DESeq2")
+library(DESeq2)
+load(file="../../RNAseq/matrix_gse_salmon_tximeta.RData")
+?DESeqDataSet()
+colData(gse)
+dds <- DESeqDataSet(gse, ~ Sex)

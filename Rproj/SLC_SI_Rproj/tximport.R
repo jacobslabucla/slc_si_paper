@@ -51,3 +51,6 @@ save(txi, file = "../matrix_tximport_salmon.Rdata") # objeto R
 write.csv(txi$abundance, file = "../matrix_salmon_tximport_abundance.csv") # TPM
 write.csv(txi$counts, file = "../matrix_salmon_tximport_counts.csv") # counts
 
+## 
+
+head(rownames(txi))
