@@ -63,7 +63,7 @@ metadata <- metadata %>% filter(Model=="HFD")
 row.names(metadata) <- metadata$SampleID
 colnames(txiSLCHFD$counts)
 row.names(metadata) == colnames(txiSLCHFD$counts)
-metadata$Genotype <- factor()
+
 
 dds = DESeqDataSetFromTximport(txiSLCHFD, colData = metadata, design = ~Sex + Genotype)
 dds <- DESeq(dds)
@@ -76,10 +76,13 @@ CDvsNormMatrix <- cbind(as(CDvsNorm, "data.frame"))
 head(CDvsNormMatrix)
 
 write.csv(CDvsNormMatrix,"RNAseq/DESEQ2_HFD_MUT_vs_WT_results.csv")
-hfd_plot <- EnhancedVolcano(CDvsNormMatrix,
-                            lab = rownames(CDvsNormMatrix),
+plot <- CDvsNormMatrix# %>% filter(padj>1e-10)
+hfd_plot <- EnhancedVolcano(plot,
+                            lab = rownames(plot),
                             x = 'log2FoldChange',
-                            y = 'pvalue',
+                            y = 'padj',
+                            ylab = bquote(~Log[10]~ '(p-adjusted)'),
+                            pCutoff = 0.05,
                             title = "SLC HFD MUT vs WT",
                             subtitle = "Gene~ Sex + Genotype")
 save(hfd_plot, file="RNAseq/hfd_plot.png")

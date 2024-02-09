@@ -70,7 +70,7 @@ head(CDvsNorm)
 CDvsNorm = CDvsNorm[order(CDvsNorm$pvalue, na.last = NA), ]
 CDvsNormMatrix <- cbind(as(CDvsNorm, "data.frame"))
 head(CDvsNormMatrix)
-write.csv(CDvsNormMatrix, "RNAseq/DESEQ2_SMTNeg_results.csv")
+write.csv(CDvsNormMatrix, "RNAseq/DESEQ2_SMTNeg_MUT_vs_WT_results.csv")
 
 
 
