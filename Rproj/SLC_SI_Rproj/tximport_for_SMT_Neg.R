@@ -22,7 +22,7 @@ setwd("/home/julianne/Documents/slc_si_paper/")
 ## List all directories containing data  
 samples <- read.delim("RNAseq/quant_salmon/SMT_Neg_Files.tsv",header=FALSE)
 samples <- samples$V1
-files <- file.path("RNAseq/quant_salmon/",samples, "quant.sf")
+files <- file.path("RNAseq/quant_salmon",samples, "quant.sf")
 names <-  gsub("_R1.*$","",samples)
 names <- gsub("^.*JJ1715_", "", names)
 names <-  gsub("_.*$","",names)
@@ -62,16 +62,23 @@ metadata <- read.delim("RNAseq/starting_files/Metadata - SMT_Neg_Metadata.tsv", 
 row.names(metadata) <- metadata$SampleID
 colnames(txiSMTNeg$counts)
 
-dds = DESeqDataSetFromTximport(txiSMTNeg, colData = metadata, design = ~Genotype)
+dds = DESeqDataSetFromTximport(txiSMTNeg, colData = metadata, design = ~Sex + Genotype)
 dds <- DESeq(dds)
-res <- results(dds)
-head(results(dds, tidy=TRUE)) #let's look at the results table
 
-res <- res[order(res$padj),]
-head(res)
+CDvsNorm=results(dds, contrast=c("Genotype", "MUT", "WT"))
+head(CDvsNorm)
+CDvsNorm = CDvsNorm[order(CDvsNorm$pvalue, na.last = NA), ]
+CDvsNormMatrix <- cbind(as(CDvsNorm, "data.frame"))
+head(CDvsNormMatrix)
+write.csv(CDvsNormMatrix, "RNAseq/DESEQ2_SMTNeg_results.csv")
 
-EnhancedVolcano(res,
+
+
+smtneg_plot <- EnhancedVolcano(res,
                 lab = rownames(res),
                 x = 'log2FoldChange',
-                y = 'pvalue')
-write.csv(res, "RNAseq/DESEQ2_SMTNeg_results.csv")
+                y = 'pvalue',
+                pCutoff = 1.3,
+                title = "SMT Negative",
+                subtitle = "Gene ~ Sex + Genotype")
+save(smtneg_plot, file="RNAseq/smtneg_plot.png")
