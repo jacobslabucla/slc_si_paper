@@ -58,6 +58,8 @@ write.csv(txiSLCHFD$counts, file = "RNAseq/starting_files/SLC_HFD_matrix_salmon_
 BiocManager::install("EnhancedVolcano")
 library(EnhancedVolcano)
 library(DESeq2)
+library(plotly)
+
 metadata <- read.delim("RNAseq/starting_files/All_Metadata.tsv", sep="\t")
 metadata <- metadata %>% filter(Model=="HFD")
 row.names(metadata) <- metadata$SampleID
@@ -76,7 +78,10 @@ CDvsNormMatrix <- cbind(as(CDvsNorm, "data.frame"))
 head(CDvsNormMatrix)
 
 write.csv(CDvsNormMatrix,"RNAseq/DESEQ2_HFD_MUT_vs_WT_results.csv")
-plot <- CDvsNormMatrix# %>% filter(padj>1e-10)
+
+plot <- read.csv("RNAseq/DESEQ2_HFD_MUT_vs_WT_results.csv",row.names = 1)
+summary(plot$padj)
+plot <- plot %>% filter(padj>1e-10) #remove unannotated outlier
 hfd_plot <- EnhancedVolcano(plot,
                             lab = rownames(plot),
                             x = 'log2FoldChange',
@@ -85,7 +90,8 @@ hfd_plot <- EnhancedVolcano(plot,
                             pCutoff = 0.05,
                             title = "SLC HFD MUT vs WT",
                             subtitle = "Gene~ Sex + Genotype")
-save(hfd_plot, file="RNAseq/hfd_plot.png")
+
+ggsave(hfd_plot, file="RNAseq/hfd_plot.png",width = 7,height=7)
 
 
 CDvsNormMatrix <- CDvsNormMatrix %>% filter(padj<0.05)
