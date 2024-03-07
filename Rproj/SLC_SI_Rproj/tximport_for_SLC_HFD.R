@@ -93,7 +93,6 @@ hfd_plot <- EnhancedVolcano(plot,
 
 ggsave(hfd_plot, file="RNAseq/hfd_plot.png",width = 7,height=7)
 
-
 CDvsNormMatrix <- CDvsNormMatrix %>% filter(padj<0.05)
 write.csv(CDvsNormMatrix,"RNAseq/significant_DESEQ2_HFD_MUT_vs_WT_results.csv")
 
